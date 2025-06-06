@@ -7,26 +7,26 @@ const handleFileUpload = async(req, res) => {
         if(!req.file) return res.status(400).json({error: "No file uploaded"});
 
         const filePath = req.file.path;
-        const originalName = req.file.originalName;
+        const originalName = req.file.originalname;
         const fileExtension = path.extname(originalName).toLowerCase();
 
         let extractedText = "";
 
-        if(fileExtension == ".pdf"){
-            const data = fs.readFileSync(filePath);
-            extractedText = await pdfParse(data).then(data => data.text);
+        try {
+            if(fileExtension == ".pdf"){
+                const data = fs.readFileSync(filePath);
+                extractedText = await pdfParse(data).then(data => data.text);
+            }
+            else if(fileExtension == ".txt"){
+                extractedText = fs.readFileSync(filePath, 'utf8')
+            }
+            else return res.status(400).json({error: "Unsupported file type"});
+        } finally {
+            fs.unlinkSync(filePath);       
         }
-        else if(fileExtension == ".txt"){
-            extractedText = fs.readFileSync(filePath, 'utf8')
-        }
-        else return res.status(400).json({error: "Unsupported file type"});
-
-        fs.unlinkSync(filePath);
 
         return res.status(200).json({
             message: "File uploaded successfully",
-            path: filePath,
-            originalName,
             text: extractedText
         });
     }

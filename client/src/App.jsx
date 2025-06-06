@@ -1,21 +1,40 @@
 import { Home, Upload, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import MoonLoader from "react-spinners/MoonLoader"
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+import axios from "axios"
 
 import logo from "@/assets/logo.png"
 import { useState } from "react"
 
 export default function App() {
   const [selectedFile, setSelectedFile] = useState(null)
+  const [uploadedFileName, setUploadFileName] = useState("")
   const [loading, setLoading] = useState(false)
 
   const onFileChange = (e) => {
+    setLoading(true);
     const file = e.target.files[0];
     setSelectedFile(file);
-    setLoading(true);
+    setUploadFileName(file.name)
+    setLoading(false);
   }  
   
-  const onFileUpload = () => {}
+  const onFileUpload = () => {
+    console.log("File uploaded:", selectedFile);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    axios.post(`${import.meta.env.VITE_API_URL}/upload`, formData)
+      .then((response) => {
+        console.log("File uploaded successfully:", response.data);
+        toast.success("File uploaded successfully!");
+      })
+      .catch((error) => {
+        console.error("Error uploading file:", error);
+        toast.error("Error uploading file. Please try again.");
+      });
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -52,7 +71,10 @@ export default function App() {
           {loading ? (
             <MoonLoader color="#8E80FC" size={40} />
           ) : (
-            <label htmlFor="file-upload">
+            uploadedFileName ? (
+              <p className="h-16 text-slate-600 flex items-center justify-center lowercase border border-[#8E80FC] px-10 border-dotted py-1 rounded border-2 font-semibold">{uploadedFileName}</p>
+            ) : (
+              <label htmlFor="file-upload">
               <input type="file" className="hidden" id="file-upload" onChange={onFileChange}/>
               <Button
               variant="outline"
@@ -63,12 +85,19 @@ export default function App() {
                 <span><Upload className="w-6 h-6 text-gray-600"/></span>
           </Button>
           </label> 
+            )
           )}
-          <Button disabled size="lg" className="bg-gray-200 text-gray-500 cursor-not-allowed hover:bg-gray-200">
-            Let's think together?
-          </Button>
+         <Button
+          disabled={!uploadedFileName}
+          onClick={onFileUpload}
+          size="lg"
+          className="relative bg-[#8E80FC] text-white cursor-pointer hover:bg-[#7B6EF0] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+          Let's think together?
+        </Button>
         </div>
       </div>
+      <Toaster richColors />
     </div>
   )
 }
