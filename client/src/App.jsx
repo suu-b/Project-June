@@ -1,9 +1,11 @@
-import './App.css'
+import { Toaster } from "@/components/ui/sonner"
+import LandingPage from "./pages/LandingPage"
 
-function App() {
-  return(
-  <>
-  </>
-)
+export default function App() {
+  return (
+    <>
+    <LandingPage />
+    <Toaster richColors />
+  </>  
+  )
 }
-export default App
