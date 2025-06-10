@@ -11,6 +11,10 @@
   "author": "suu-b",
   "license": "ISC",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
+    "@huggingface/transformers": "^3.5.2",
+    "@langchain/community": "^0.3.45",
+    "@langchain/core": "^0.3.57",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
