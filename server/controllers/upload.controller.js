@@ -1,11 +1,12 @@
 const path = require('path');
 const fs = require('fs');
+const { MemoryVectorStore } = require("langchain/vectorstores/memory")
 require('dotenv').config();
 
 const extractText = require('../utils/extractText.util');
 const chunkText = require('../utils/chunkText.util');
 const embeddings = require('../utils/embedding.util');
-const { MemoryVectorStore } = require("langchain/vectorstores/memory")
+const store = require('../store/vector.store')
 
 const handleFileUpload = async(req, res) => {
     const filePath = req?.file.path;
@@ -21,6 +22,7 @@ const handleFileUpload = async(req, res) => {
         }))
 
         const vectorStore = await MemoryVectorStore.fromTexts(chunks, metadata, embeddings);
+        store.setVectorStore(vectorStore);
 
         return res.status(200).json({ message: "File processed successfully" });
     }
