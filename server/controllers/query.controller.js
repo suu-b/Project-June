@@ -1,4 +1,5 @@
 const store = require("../store/vector.store");
+const { runLLM, runLLMToGetFormattedTitle } = require("../utils/llmwrapper.util")
 
 const handleQuery = async (req, res) => {
   try {
@@ -14,12 +15,28 @@ const handleQuery = async (req, res) => {
     }
 
     const nearestVectors = await vectorStore.similaritySearch(query, 4); 
-
-    return res.status(200).json({ result: nearestVectors });
+    const response = await runLLM(query, nearestVectors);
+    return res.status(200).json({ result: response.content });
   } catch (e) {
     console.error("Failed to handle the query:", e);
     return res.status(500).json({ error: "Failed to handle the query. Try again later." });
   }
 };
 
-module.exports = { handleQuery };
+const handleTitleFormat = async (req, res) => {
+    try{
+      const fileName = req.body.fileName;
+
+    if (!fileName || typeof fileName !== "string" || fileName.trim() === "") {
+      return res.status(400).json({ error: "Query must be a non-empty string" });
+    }
+
+    const response = await runLLMToGetFormattedTitle(fileName);
+    return res.status(200).json({ result: response.content });
+    } catch (e) {
+    console.error("Failed to format the name:", e);
+    return res.status(500).json({ error: "Failed to handle the query. Try again later." });
+  }
+};
+
+module.exports = { handleQuery, handleTitleFormat };

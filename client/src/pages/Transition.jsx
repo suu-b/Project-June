@@ -22,8 +22,11 @@ export default function Transition() {
 
       try {
         await axios.post(`${import.meta.env.VITE_API_URL}/upload`, formData);
+        const formattedTitleResponse = await axios.post(`${import.meta.env.VITE_API_URL}/query/format-title`, {fileName: file.name});
+        const formattedTitle = formattedTitleResponse.data.result;
+
         toast.success("File processed successfully!");
-        navigate("/chat");
+        navigate("/chat", {state: {formattedTitle: formattedTitle}});
       } catch (error) {
         console.log(error)
         toast.error("Error processing the file. Please try again.");
