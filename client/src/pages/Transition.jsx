@@ -14,7 +14,7 @@ export default function Transition() {
     const uploadFile = async () => {
       if (!file) {
         toast.error("No file found for upload.");
-        return navigate("/");
+        return navigate("/home");
       }
 
       const formData = new FormData();
