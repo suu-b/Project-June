@@ -30,7 +30,7 @@ export default function Transition() {
       } catch (error) {
         console.log(error)
         toast.error("Error processing the file. Please try again.");
-        navigate("/");
+        navigate("/home");
       }
     };
 

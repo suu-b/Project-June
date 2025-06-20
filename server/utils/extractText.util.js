@@ -11,7 +11,7 @@ async function extractText(filePath){
         return pdfData.text;
     }
     else if(fileExtension == ".txt") return fs.readFileSync(filePath, 'utf8');
-    
+    console.log("The file extension is:", fileExtension)
     throw new Error("Unsupported file type. Only .pdf and .txt files are supported.");
 }
 
