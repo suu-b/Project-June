@@ -74,7 +74,7 @@ export default function RollUsername() {
   return (
     <section
       id="roll-username"
-      className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4"
+      className="min-h-screen min-w-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4"
     >
       <div className="text-center">
         <Dice5 className="animate-spin mx-auto" size={100} color="#8E80FC" />

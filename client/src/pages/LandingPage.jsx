@@ -1,118 +1,115 @@
-import { useState } from "react";
-import { Upload } from "lucide-react";
-import MoonLoader from "react-spinners/MoonLoader";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-
-import { Button } from "@/components/ui/button";
+import { Shuffle, GitCompare, Sparkles, Brain } from "lucide-react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { getStoredUsername } from "../lib/client.util"
 import logo from "@/assets/logo.png";
-import { getStoredUsername } from "../lib/client.util";
+import { Link } from "react-router-dom"
+
 
 export default function LandingPage() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadedFileName, setUploadFileName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const username = getStoredUsername()
 
-  const username = getStoredUsername();
-  const navigate = useNavigate();
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1 },
+    hover: { scale: 1.05, y: -5 },
+  }
 
-  const onFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-    setUploadFileName(file.name);
-  };
-
-  const onFileUpload = () => {
-    setLoading(true);
-    navigate("/processing", { state: { file: selectedFile } });
-    setLoading(false);
-  };
+  const features = [
+    {
+      title: "Brainstorm Document",
+      icon: <Brain className="w-6 h-6 text-[#8E80FC]" />,
+      description: "Generate research ideas and explore academic topics with AI guidance",
+      action: "Start Brainstorming",
+      featureKey: "brainstorm",
+      link: "/brainstorm-document"
+    },
+    {
+      title: "Random Wikipedia Roll",
+      icon: <Shuffle className="w-6 h-6 text-[#8E80FC]" />,
+      description: "Discover fascinating topics and dive deep into unexpected knowledge",
+      action: "Roll the Dice",
+      featureKey: "wikipedia",
+      link: "/roll-wiki"
+    },
+    {
+      title: "Compare Two Documents",
+      icon: <GitCompare className="w-6 h-6 text-[#8E80FC]" />,
+      description: "Analyze similarities, differences, and insights between any two texts",
+      action: "Start Comparing",
+      featureKey: "compare",
+      link: "compare-documents"
+    },
+  ]
 
   return (
     <motion.div
-      className="h-screen flex-1 flex flex-col"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-white px-4 py-12"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className="flex-1 flex flex-col items-center justify-center space-y-8">
+      <motion.div
+        className="text-center mb-12"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+      >
         <motion.img
           src={logo}
           alt="Logo"
-          className="h-42 mb-3"
+          className="h-48 mx-auto mb-3"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 100, damping: 10, delay: 0.2 }}
         />
 
-        <motion.div
-          className="text-center"
+        <motion.h1
+          className="text-5xl font-semibold text-slate-700 mb-2"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+          transition={{ delay: 0.6 }}
         >
-          <h1 className="text-5xl text-slate-800 mb-2">
-            hi{" "}
-            <span className="text-5xl font-bold text-[#8E80FC]">{username}</span>!
-          </h1>
-          <p className="text-5xl text-slate-800">
-            <span className="text-[#8E80FC] font-bold">curious</span> about something?
-          </p>
-        </motion.div>
+          hi <span className="text-[#8E80FC] font-bold">{username}</span>!
+        </motion.h1>
+        <p className="text-4xl text-slate-700">
+          <span className="text-[#8E80FC] font-bold">curious</span> about something?
+        </p>
+      </motion.div>
 
-        {loading ? (
-          <MoonLoader color="#8E80FC" size={40} />
-        ) : uploadedFileName ? (
-          <motion.p
-            className="h-16 text-slate-600 flex items-center justify-center lowercase border border-[#8E80FC] px-10 border-dotted py-1 rounded border-2 font-semibold"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
+      <motion.div
+        className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl"
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+      >
+        {features.map((feature) => (
+          <motion.div
+            key={feature.featureKey}
+            whileHover="hover"
+            variants={cardVariants}
+            transition={{ delay: 0, duration: 0.5 }}
           >
-            {uploadedFileName}
-          </motion.p>
-        ) : (
-          <motion.label
-            htmlFor="file-upload"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <input
-              type="file"
-              className="hidden"
-              id="file-upload"
-              onChange={onFileChange}
-            />
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-16 h-16 rounded-full border-2 border-gray-300 hover:border-[#8E80FC] hover:bg-gray-50 cursor-pointer transition-colors"
-              asChild
-            >
-              <span>
-                <Upload className="w-6 h-6 text-gray-600" />
-              </span>
-            </Button>
-          </motion.label>
-        )}
-
-        <motion.div
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <Button
-            disabled={!uploadedFileName}
-            onClick={onFileUpload}
-            size="lg"
-            className="relative bg-[#8E80FC] text-white cursor-pointer hover:bg-[#7B6EF0] disabled:opacity-50 disabled:cursor-not-allowed"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Let's think together?
-          </Button>
-        </motion.div>
-      </div>
+            <Card className="border-2 border-gray-200 hover:border-[#8E80FC] transition-colors shadow-lg">
+              <CardContent className="p-3 text-center">
+                <div className="w-18 h-18 bg-[#8E80FC]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-2">{feature.title}</h3>
+                <p className="text-sm text-slate-600">{feature.description}</p>
+                <Link to={feature.link}>
+                <Button
+                  className="cursor-pointer mt-4 bg-[#8E80FC] hover:bg-[#7B6EF0] text-white"
+                >
+                  {feature.action}
+                </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
     </motion.div>
-  );
+  )
 }
