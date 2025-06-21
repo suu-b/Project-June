@@ -3,7 +3,7 @@ const { HuggingFaceTransformersEmbeddings } = require("@langchain/community/embe
 
 require("dotenv").config();
 
-const useLocalEmbedddings = process.env.USE_LOCAL_EMBEDDINGS || false;
+const useLocalEmbedddings = process.env.IS_IT_LOCAL || false;
 
 const embeddings = useLocalEmbedddings ? new HuggingFaceInferenceEmbeddings(
     {

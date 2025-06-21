@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, Flower } from "lucide-react";
+import { Send, Flower, Search } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
@@ -14,6 +14,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isWebSearchAllowed, setIsWebSearchAllowed] = useState(false)
 
   const location = useLocation();
   const formattedTitle = location.state.formattedTitle
@@ -21,9 +22,9 @@ export default function Chat() {
   const returnRelevantChunks = async (query) => {
     try {
       setLoading(true);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, {
-        query,
-      });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`,
+        {query, isWebSearchAllowed}
+      );
       const result = response.data.result;
       if (result) {
         setMessages((prev) => [
@@ -70,7 +71,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background w-1/2 mx-auto">
+    <div className="flex flex-col h-screen min-w-full bg-background p-8 mx-auto">
       <h1 className="font-bold text-[#8E80FC] text-xl mt-10">
         <span className="text-slate-600">On </span>{formattedTitle}
       </h1>
@@ -188,7 +189,18 @@ export default function Chat() {
 
       <div className="border-t border-border/40 p-4">
         <div className="max-w-4xl mx-auto">
-          <div className="flex gap-2 items-end">
+          <div className="flex gap-2 flex-col justify-end">
+            <Button
+                onClick={() => {
+                  setIsWebSearchAllowed(webSearchAllowed => !webSearchAllowed)
+                }}
+                disabled={!inputValue.trim()}
+                size="sm"
+                className="h-fit w-fit text-xs p-x-3 py-2 rounded-lg text-white"
+                style={{ backgroundColor: "#8E80FC" }}
+              >
+               {isWebSearchAllowed ? "Allowed": "Allow"} Web Search <Search className="w-4 h-4>" />
+              </Button>
             <div className="flex-1 relative">
               <Input
                 value={inputValue}

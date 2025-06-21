@@ -38,7 +38,7 @@ export default function Transition() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen min-w-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="text-center">
         <ClimbingBoxLoader color={"#8E80FC"} size={30} className='mx-auto mb-14'/>
 
