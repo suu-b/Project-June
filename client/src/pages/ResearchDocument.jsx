@@ -44,7 +44,7 @@ export default function ResearchDocument() {
 
   const onFileUpload = () => {
     setLoading(true);
-    navigate("/processing", { state: { file: selectedFile } });
+    navigate("/processing", { state: { file: selectedFile, from: "research-document" } });
     setLoading(false);
   };
 
@@ -127,7 +127,7 @@ export default function ResearchDocument() {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: 0.5 }}
                             >
-                              {uploadedFileName}
+                              {uploadedFileName && uploadedFileName.length < 15 ? uploadedFileName : uploadedFileName.substring(0,15) + "..."}
                             </motion.p>
                           ) : (
                             <motion.label

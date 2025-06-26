@@ -17,8 +17,10 @@ import Transitions from "./pages/Transition"
 import ResearchDocument from "./pages/ResearchDocument"
 import WikiRoll from "./pages/WikiRoll"
 import CompareDoc from "./pages/CompareDoc"
-
 import Chat from "./pages/Chat"
+
+import "./App.css"
+
 import { getStoredUsername } from "./lib/client.util"
 
 function AppLayout() {
@@ -42,16 +44,14 @@ function AppLayout() {
           }`}
         >
           <Routes>
-            <Route
-              path="/"
-              element={ username ? <LandingPage /> : <RollUsername />}
-            />
+            <Route path="/" element={ username ? <LandingPage /> : <RollUsername />}/>
             <Route path="/home" element={<LandingPage />} />
             <Route path="/brainstorm-document" element={<ResearchDocument />} />
             <Route path="/processing" element={<Transitions />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/roll-wiki" element={<WikiRoll />} />
             <Route path="/compare-documents" element={<CompareDoc />} />
+            <Route path="*" element={<LandingPage />} />
           </Routes>
           <Toaster richColors />
         </SidebarInset>

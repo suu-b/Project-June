@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getStoredUsername } from "../lib/client.util"
 import logo from "@/assets/logo.png";
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 
 export default function LandingPage() {
-  const username = getStoredUsername()
+  const username = getStoredUsername();
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.8 },
