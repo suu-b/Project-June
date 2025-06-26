@@ -8,7 +8,8 @@ export default function Transition() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const file = location.state.file
+    const file = location?.state?.file;
+    const from  = location?.state?.from;
 
     useEffect(() => {
     const uploadFile = async () => {
@@ -26,13 +27,17 @@ export default function Transition() {
         const formattedTitle = formattedTitleResponse.data.result;
 
         toast.success("File processed successfully!");
-        navigate("/chat", {state: {formattedTitle: formattedTitle}});
+        navigate("/chat", {state: {formattedTitle: formattedTitle, from: "transition"}});
       } catch (error) {
         console.log(error)
         toast.error("Error processing the file. Please try again.");
         navigate("/home");
       }
     };
+    
+    if((!from || !file) || (from != "research-document" && from != "wiki-roll")){
+        return navigate("/home")
+      }
 
     uploadFile();
   }, []);

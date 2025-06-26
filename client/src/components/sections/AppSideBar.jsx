@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const navItems = [
   {
@@ -41,7 +41,7 @@ const navItems = [
     title: "Roll Wiki",
     url: "/roll-wiki",
     icon: Shuffle,
-    badge: "under/dev",
+    badge: "new/feat!",
   },
   {
     title: "Compare Documents",
@@ -61,6 +61,8 @@ const aboutItems = [
 ]
 
 export default function AppSideBar({ ...props }) {
+  const navigate = useNavigate();
+
   return (
     <Sidebar collapsible="offcanvas" {...props} className="shadow-lg">
       <SidebarHeader>
@@ -73,7 +75,7 @@ export default function AppSideBar({ ...props }) {
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gray-100 text-sidebar-primary-foreground">
                     <Flower className="h-5 w-5" color="#8E80FC"/>
                   </div>
-                  <div className="grid flex-1 text-left leading-tight mt-2 mr-5">
+                  <div className="grid flex-1 text-left leading-tight mt-2 mr-5 cursor-pointer" onClick={() => navigate("/home")}>
                     <span className="truncate text-xl font-semibold text-slate-700">Project <span className="text-[#8E80FC] font-bold">June</span></span>
                     <span className="truncate text-xs text-slate-700">Your own Research bud</span>
                   </div>
@@ -96,7 +98,7 @@ export default function AppSideBar({ ...props }) {
                       {item.badge && (
                         <Badge
                           variant="outline"
-                          className="ml-auto h-5 px-1.5 text-xs bg-yellow-100 text-yellow-800 border-yellow-200"
+                          className={`ml-auto h-5 px-1.5 text-xs ${item.badge == "under/dev" ? "bg-yellow-100 text-yellow-800 border-yellow-200" : "bg-green-100 text-green-800 border-green-200"}`}
                         >
                           {item.badge}
                         </Badge>
@@ -122,7 +124,7 @@ export default function AppSideBar({ ...props }) {
                       {item.badge && (
                         <Badge
                           variant="outline"
-                          className="ml-auto h-5 px-1.5 text-xs bg-yellow-100 text-yellow-800 border-yellow-200"
+                          className={`ml-auto h-5 px-1.5 text-xs ${item.badge == "under/dev" ? "bg-yellow-100 text-yellow-800 border-yellow-200" : "bg-green-100 text-green-800 border-green-200"}`}
                         >
                           {item.badge}
                         </Badge>

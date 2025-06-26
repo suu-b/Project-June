@@ -42,7 +42,7 @@ export default function WikiRoll() {
     const file = new File ([fetchedArticleContent], `${fetchedArticle}.txt`, {type: "text/plain"});
     console.log(file)
     setLoading(true);
-    navigate("/processing", { state: { file: file } });
+    navigate("/processing", { state: { file: file, from: "wiki-roll" } });
     setLoading(false);
   };
 
