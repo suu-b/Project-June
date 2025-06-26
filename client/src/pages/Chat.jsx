@@ -113,7 +113,8 @@ export default function Chat() {
   const returnRelevantChunks = async (query) => {
     try {
       setLoading(true)
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { query, isWebSearchAllowed })
+      const messagesToSend = messages.slice(-5);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { query, isWebSearchAllowed, messages : messagesToSend })
       const result = response.data.result
       if (result) {
         setMessages((prev) => [

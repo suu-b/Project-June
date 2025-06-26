@@ -21,6 +21,7 @@ const handleFileUpload = async(req, res) => {
             uploadedAt: new Date().toISOString()
         }))
 
+        console.log("here")
         const vectorStore = await MemoryVectorStore.fromTexts(chunks, metadata, embeddings);
         store.setVectorStore(vectorStore);
 
