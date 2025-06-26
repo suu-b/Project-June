@@ -19,6 +19,10 @@ const handleQuery = async (req, res) => {
     const vectorStore = store.getVectorStore();
     const query = req.body.query;
     const isWebSearchAllowed = req.body.isWebSearchAllowed
+    const messageHistory = req.body.messages;
+
+    const messageContext = messageHistory.slice(-5); //to keep only last 5 messages as a context
+    const messages = `${messageContext.map((message, index) => `${index + 1}. ${message.sender}: ${message.content}`).join("\n")}`
 
     if (!query || typeof query !== "string" || query.trim() === "") {
       return res.status(400).json({ error: "Query must be a non-empty string" });
@@ -35,7 +39,7 @@ const handleQuery = async (req, res) => {
       `WEB SEARCH RESULTS:\n${webResults}`
     ]
 
-    const response = await runLLM(query, context);
+    const response = await runLLM(query, context, messages);
     return res.status(200).json({ result: response.content });
   } catch (e) {
     console.error("Failed to handle the query:", e);

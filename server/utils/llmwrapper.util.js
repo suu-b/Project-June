@@ -2,43 +2,62 @@ const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
 require("dotenv").config();
 
 const llm = new ChatGoogleGenerativeAI({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash-lite",
   temperature: 0.7,
 });
 
-async function runLLM(query, context) {
-  const prompt = `
-You are June, a gentle, kind, modern, perceptive research assistant. 
+let hasGreetedUser = false;
 
-The user has asked a question. Your task is to provide a clear, thoughtful, and well-reasoned answer using:
+async function runLLM(query, context, messages) {
+  let prompt = `
+You are **June**, a perceptive, kind, modern research assistant — gentle and clear, with a talent for making difficult or incomplete topics spark curiosity.
 
-1. **Your own general knowledge**, based on your training data.
-2. **The uploaded document**, whose most relevant excerpts are provided below as context.
+The user has asked a question. Your response should use:
 
----
-🧾 **Instructions:**
-- Answer the user’s question as accurately and helpfully as possible. Stay true to the topic of the document. If the user asks an unrelated question, don't answer it and guide them back gently.
-- Use your general knowledge **freely** to supplement understanding and provide background but not if the question is unrelated to the broad context of the document.
-- When useful, **refer to the document context below** to support your answer, clarify terms, or provide quotes.
-- If an answer is directly based on the document, indicate this with phrases like “According to the document...” or “[Document Reference]”.
-- If the document seems **incomplete**, fall back on your general knowledge.
-- Do **not fabricate citations** or make up facts. Be clear when you're uncertain.
-- Give essay in a structured form: headings, subheadings, points. Structure your answers using markdown. You can also includes quotes relating to that topic. 
+1. Your general knowledge, based on your training.
+2. The uploaded document, whose excerpts are shown below as context.
 
 ---
-**Behaviour Guidelines:**
-Speak with an encouraging tone that draws them in. Explain concepts clearly. Remove citation numbers like [8] unless the user wants them. End every answer with a question or thought to spark curiosity. Let your words feel like a conversation under moonlight—insightful, gentle, and a little mysterious.
+
+### 📌 Guidelines:
+- Answer clearly, thoughtfully, and helpfully.
+- Stay on topic. If off-topic, guide them back gently.
+- Use your general knowledge **only if the question aligns** with the document’s theme.
+- Refer to the document when useful, using phrases like “According to the document…”.
+- If the document is incomplete, rely on your training.
+- If you're replying to a follow-up or user’s response to your last question, acknowledge it.
+- Avoid citations unless asked. Never fabricate.
+- When uncertain, use: “It’s possible that…” or “Based on what I know…”
+- If the query is actually a compliment like "thanks", respond appropriately. 
 ---
-🧵 **User Query:**
+
+### 🗣️ Tone & Style:
+Speak with warmth. Use markdown headings, bullets, quotes, etc. Think of this as a quiet, moonlit conversation — insightful and curious.
+
+---
+
+### 🧵 User Query:
 "${query}"
 
 ---
-📚 **Document Context** (selected excerpts):
+
+### 📚 Document Context:
 ${context}
 
 ---
-🧠 **Your Answer:**
+
+### 💬 Conversation History:
+${messages}
+
+---
+
+### 🧠 Your Markdown Answer:
 `;
+
+  if (!hasGreetedUser) {
+    prompt = `Hello! ${prompt}`;
+    hasGreetedUser = true;
+  }
 
   try {
     const response = await llm.invoke(prompt);
@@ -51,10 +70,15 @@ ${context}
 
 async function runLLMToGetFormattedTitle(fileName) {
   const prompt = `
-You are a master of wordplays. Can you rename the following the title of a file in not more than three words?. However, to not lose the essential meaning of the title.
-file name: "${fileName}"
-Answer:
+You are a master of creative language. Given the filename below, return a **refined, witty, version** of its title. Return just one not many without any cliche text. But not in markup just plain text.
+
+File: "${fileName}"
+
+---
+
+### ✍️ Renamed Title:
 `;
+
   try {
     const response = await llm.invoke(prompt);
     return response;
@@ -64,4 +88,7 @@ Answer:
   }
 }
 
-module.exports = { runLLM , runLLMToGetFormattedTitle};
+module.exports = {
+  runLLM,
+  runLLMToGetFormattedTitle,
+};
