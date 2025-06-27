@@ -12,9 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@huggingface/inference": "^2.8.1",
+    "@huggingface/inference": "^4.0.5",
     "@huggingface/transformers": "^3.5.2",
-    "@langchain/community": "^0.3.45",
+   "@langchain/community": "^0.3.47",
     "@langchain/core": "^0.3.58",
     "@langchain/google-genai": "^0.2.12",
     "axios": "^1.10.0",
