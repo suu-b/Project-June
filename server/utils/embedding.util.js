@@ -3,17 +3,21 @@ const { HuggingFaceTransformersEmbeddings } = require("@langchain/community/embe
 
 require("dotenv").config();
 
-const useLocalEmbedddings = process.env.IS_IT_LOCAL || false;
+const useLocalEmbedddings = process.env.IS_IT_LOCAL === "true";
 
-const embeddings = useLocalEmbedddings ? new HuggingFaceInferenceEmbeddings(
-    {
-        modelName: "sentence-transformers/all-MiniLM-L6-v2",
-        apiKey: process.env.HUGGING_FACE_API_KEY   
-    }) :
-    new HuggingFaceTransformersEmbeddings({
-    model: "Xenova/all-MiniLM-L6-v2",
-  })
+const embeddings = useLocalEmbedddings
+  ? new HuggingFaceTransformersEmbeddings({
+      model: "Xenova/all-MiniLM-L6-v2",
+    })
+  : new HuggingFaceInferenceEmbeddings({
+      modelName: "sentence-transformers/all-MiniLM-L6-v2",
+      apiKey: process.env.HUGGING_FACE_API_KEY,
+    });
 
-console.log(useLocalEmbedddings ? "Using local Transformers model (Xenova/all-MiniLM-L6-v2)" : "Using Hugging Face Inference API (sentence-transformers/all-MiniLM-L6-v2)");
+console.log(
+  useLocalEmbedddings
+    ? "Using local Transformers model (Xenova/all-MiniLM-L6-v2)"
+    : "Using Hugging Face Inference API (sentence-transformers/all-MiniLM-L6-v2)"
+);
 
 module.exports = embeddings;
