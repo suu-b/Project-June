@@ -17,7 +17,15 @@ The project was fuelled by the void that existed in my mind when the term 'AI' e
 Tho, there is no solid reason for anyone to install it, still if one insists on taking a look at how things are wired inside, one can follow these commands:
 
 ```
-//commands
+git clone https://github.com/suu-b/Project-June.git
+cd Project-June
+cd ./client
+// add .env for client using ./client/.env.example
+npm run dev //to run client
+
+cd ./server
+// add .env for server using ./server/.env.example
+npm run dev //to run development server
 ```
 
 ## A look at the tech stack?
