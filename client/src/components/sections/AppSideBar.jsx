@@ -77,7 +77,7 @@ export default function AppSideBar({ ...props }) {
                   </div>
                   <div className="grid flex-1 text-left leading-tight mt-2 mr-5 cursor-pointer" onClick={() => navigate("/home")}>
                     <span className="truncate text-xl font-semibold text-slate-700">Project <span className="text-[#8E80FC] font-bold">June</span></span>
-                    <span className="truncate text-xs text-slate-700">Your own Research bud</span>
+                    <span className="truncate text-xs text-slate-700">To think and to not think</span>
                   </div>
                 </SidebarMenuButton>
           </SidebarMenuItem>

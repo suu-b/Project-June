@@ -30,6 +30,7 @@ export default function Chat() {
     if (!formattedTitle || !from || from != "transition") {
       navigate("/home")
     }
+    returnSummary();
   }, [])
 
   useEffect(() => {
@@ -110,6 +111,38 @@ export default function Chat() {
     }
   }, [messages, scrollToBottom])
 
+  const returnSummary = async () => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query/summarize`)
+      console.log(response);
+
+      const summary = response.data?.summary;
+      const thumbnail = response.data?.thumbnail;
+      const result = summary;
+      if (summary) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `${Date.now()}-assistant`,
+            content: result,
+            sender: "assistant",
+            timestamp: new Date(),
+            isSummary: true,
+            thumbnail
+          },
+        ])
+      } else {
+        toast.warning("Could not fetch summary. Refresh.")
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error("Error retrieving answer from assistant. Please refresh and start over again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
   const returnRelevantChunks = async (query) => {
     try {
       setLoading(true)
@@ -126,13 +159,12 @@ export default function Chat() {
             timestamp: new Date(),
           },
         ])
-        toast.success("Answer received!")
       } else {
         toast.warning("No relevant answer was found.")
       }
     } catch (error) {
       console.error(error)
-      toast.error("Error retrieving answer from assistant.")
+      toast.error("Error retrieving answer from assistant. Please refresh and start over again.")
     } finally {
       setLoading(false)
     }
@@ -175,32 +207,17 @@ export default function Chat() {
           <div className="max-w-4xl mx-auto pb-4">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-                <Card className="max-w-lg w-full border-none shadow-none bg-white/60 backdrop-blur-md">
+                <Card className="max-w-xl w-full border-none shadow-none bg-white/60 backdrop-blur-md">
                   <CardContent className="px-6 py-8">
-                    <h2 className="text-4xl font-bold text-[#8E80FC] mb-2">Ready when you are!</h2>
+                    <h2 className="text-4xl font-bold text-[#8E80FC] mb-2">Let's see what your document is about...</h2>
                   </CardContent>
                 </Card>
-                <div className="flex flex-wrap gap-2 mt-6 justify-center">
-                  {[
-                    "Summarize the document...",
-                    "What are the key takeaways from this topic?",
-                    "Can you list all the citations?",
-                  ].map((suggestion, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setInputValue(suggestion)}
-                      className="cursor-pointer text-sm px-4 py-3 rounded-lg max-w-xs shadow-lg border border-[#8E80FC40] bg-[#8E80FC10] text-[#8E80FC] hover:bg-[#8E80FC20] transition-colors"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
               </div>
             ) : (
               <div className="space-y-6 py-4">
                 {messages.map((message) => (
                   <div key={message.id} data-message>
-                    <Message message={message} />
+                    <Message message={message} isSummary={message.isSummary || false}/>
                   </div>
                 ))}
 
@@ -234,6 +251,21 @@ export default function Chat() {
             >
               {isWebSearchAllowed ? "Allowed" : "Allow"} Web Search <Search className="w-4 h-4 ml-1" />
             </Button>
+            <div>
+              {[
+                    "What is the main idea behind the document?",
+                    "What are the key takeaways from this topic?",
+                    "Can you list all the citations?",
+                  ].map((suggestion, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setInputValue(suggestion)}
+                      className="cursor-pointer text-xs mr-1 px-4 py-3 rounded-lg max-w-xs shadow-lg border border-[#8E80FC40] bg-[#8E80FC10] text-[#8E80FC] hover:bg-[#8E80FC20] transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+            </div>
             <div className="relative">
               <Input
                 value={inputValue}

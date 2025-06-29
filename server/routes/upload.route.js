@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const { handleFileUpload } = require("../controllers/upload.controller")
+const { handleFileUpload,handleThumbnailUpload } = require("../controllers/upload.controller")
 
 
 const router = express.Router()
@@ -21,5 +21,6 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 router.post("/", upload.single("file"), handleFileUpload);
+router.post("/thumbnail", handleThumbnailUpload);
 
 module.exports = router;

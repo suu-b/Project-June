@@ -1,5 +1,6 @@
 const store = require("../store/vector.store");
-const { runLLM, runLLMToGetFormattedTitle } = require("../utils/llmwrapper.util");
+const thumbnailStore = require("../store/thumbnail.store");
+const { runLLM, runLLMToGetFormattedTitle, runLLMToSummarize } = require("../utils/llmwrapper.util");
 const  searchWeb  = require("../utils/searchWeb.util");
 
 
@@ -28,7 +29,7 @@ const handleQuery = async (req, res) => {
       return res.status(400).json({ error: "Query must be a non-empty string" });
     }
 
-    const ifSearchOnWeb = isWebSearchAllowed && keywordsRequireForRealTimeSearch.some(keyword => query.toLowerCase().includes(keyword))    
+    const ifSearchOnWeb = isWebSearchAllowed && keywordsRequireForRealTimeSearch.some(keyword => query.toLowerCase().includes(keyword)) ;   
 
     const isItLocalTesting = process.env.IS_IT_LOCAL;
     const webResults = isItLocalTesting ? "N/A" : ifSearchOnWeb ? await searchWeb(query) : "N/A"  
@@ -63,4 +64,28 @@ const handleTitleFormat = async (req, res) => {
   }
 };
 
-module.exports = { handleQuery, handleTitleFormat };
+const handleSummarize = async (req, res) => {
+    try{
+      const vectorStore = store.getVectorStore();
+      const thumbnail = thumbnailStore.getThumbnailStore();
+      thumbnailStore.setThumbnailStore(null);
+
+      const summaryQuery = "Summarize the document...";
+
+      const nearestVectors = await vectorStore.similaritySearch(summaryQuery, 4); 
+
+      const context = [`DOCUMENT CONTEXT:\n${nearestVectors.map((v, i) => `[D${i + 1}] ${v.pageContent}`).join("\n")}`];
+      const summaryResponse = await runLLMToSummarize(summaryQuery, context);
+      console.log(summaryResponse);
+      const summary = summaryResponse.content;
+
+      console.log(thumbnail)
+
+      return res.status(200).json({summary, thumbnail});
+    } catch (e) {
+    console.error("Failed to format the name:", e);
+    return res.status(500).json({ error: "Failed to handle the query. Try again later." });
+  }
+};
+
+module.exports = { handleQuery, handleTitleFormat, handleSummarize };
