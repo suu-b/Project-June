@@ -1,6 +1,6 @@
-# Project June
-
 ![Logo](./client/src/assets/logo.png)
+
+# Project June
 
 ## What is Project June?
 
