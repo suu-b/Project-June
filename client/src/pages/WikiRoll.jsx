@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export default function WikiRoll() {
   const [fetchedArticle, setFetchedArticle] = useState(null);
   const [fetchedArticleContent, setFetchedArticleContent] = useState(null);
+  const [fetchedArticleThumbnail, setFetchedArticleThumbnail] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -38,9 +39,10 @@ export default function WikiRoll() {
 ];
 
 
-  const onMovingForthWithTheArticle = () => {
-    const file = new File ([fetchedArticleContent], `${fetchedArticle}.txt`, {type: "text/plain"});
-    console.log(file)
+  const onMovingForthWithTheArticle = async () => {
+    const file = new File ([fetchedArticleContent], `${fetchedArticle}.html`, {type: "text/plain"});
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload/thumbnail`, {thumbnailSrc: fetchedArticleThumbnail});
+    console.log("Response from setting up the thumbnail:", response.data);
     setLoading(true);
     navigate("/processing", { state: { file: file, from: "wiki-roll" } });
     setLoading(false);
@@ -52,10 +54,11 @@ export default function WikiRoll() {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/wiki/roll`);
       setFetchedArticle(data.title);
       setFetchedArticleContent(data.content);
+      setFetchedArticleThumbnail(data.thumbnailSrc)
     }
     catch(errr){
       console.error("Error rolling the wiki:", errr)
-      toast.error("Error rolling the wiki.")
+      toast.error("Error rolling the wiki. Try refershing the window.")
     } finally{
       setLoading(false);
     }

@@ -30,7 +30,7 @@ export default function Transition() {
         navigate("/chat", {state: {formattedTitle: formattedTitle, from: "transition"}});
       } catch (error) {
         console.log(error)
-        toast.error("Error processing the file. Please try again.");
+        toast.error("Error processing the file. Please try refreshing the window.");
         navigate("/home");
       }
     };

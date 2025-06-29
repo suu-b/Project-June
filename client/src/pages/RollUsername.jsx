@@ -13,46 +13,47 @@ export default function RollUsername() {
 
   const usernames = [
   {
-    name: "Lame Fox",
-    description: "Clever but never boastful, this one wanders quietly through the underbrush of thoughts. Their ideas come softly, never rushed. They linger where others sprint."
+    name: "Nervous Hedgehog",
+    description: "Wants to be brave, but double-checks everything first. Keeps jokes in their pockets and a backup plan in their shoes. Never in a rush, always sincere."
   },
   {
-    name: "Silent Owl",
-    description: "Eyes like lanterns in a midnight library, it watches, understands, remembers. Silent, but never absent. Each gaze is a chapter, each blink a verse."
+    name: "Polite Jackal",
+    description: "Sharp mind, smoother words. Knows when to speak, and when to offer you the last slice. Can solve a problem while tying their shoes."
   },
   {
-    name: "Frail Wolf",
-    description: "A lone soul with cracked armor and an unshaken howl. Their strength lies not in teeth but in resilience. Even fragility can be a form of defiance."
+    name: "Sleepy Weasel",
+    description: "Always five minutes late and somehow still right. Their ideas are mumbled, half-laughed, and weirdly brilliant. They do their best thinking with their eyes closed."
   },
   {
-    name: "Lucid Lynx",
-    description: "Sharp in thought, serene in manner. This creature sees through facades and forests alike. They walk between ideas as if born to bridge them."
+    name: "Cautious Crow",
+    description: "Not the loudest in the room, but definitely the one watching. Notices what others skip. Knows where the truth is hiding, but won’t blurt it out unless it matters."
   },
   {
-    name: "Meek Panther",
-    description: "Dark as ink, soft as moss, fierce in silence. Power is worn like perfume, never shouted. They only strike when the meaning is pure."
+    name: "Curious Sloth",
+    description: "Moves slowly, asks deeply. Doesn’t need to rush — they’ll understand you eventually. Loves old books, strange facts, and staring into space for long periods."
   },
   {
-    name: "Witty Toad",
-    description: "Odd and unapologetically clever. Leaps of logic are their playground. Their jokes bloom like fungi after rain—unexpected and wise."
+    name: "Blunt Otter",
+    description: "Says what they mean, sometimes before thinking. Can’t lie convincingly even if they tried. Laughs too loud, cares too much, always shows up."
   },
   {
-    name: "Kind Serpent",
-    description: "With movements as smooth as forgiveness, they wind through tense moments offering calm. A healer’s tongue behind a feared silhouette. They rewrite the tale of venom with virtue."
+    name: "Hopeful Badger",
+    description: "Keeps trying, even when it's all falling apart. Has a playlist for everything and probably cried over a comic book once. Relentlessly kind."
   },
   {
-    name: "Anxious Falcon",
-    description: "Speed and uncertainty are their twin wings. They fly fast not to escape, but to understand. Every tremor makes them more aware, more alive."
+    name: "Jumpy Koala",
+    description: "Looks calm until startled. Then apologizes for being startled. Loves snacks, hates confrontation, and gives surprisingly good advice at 2 AM."
   },
   {
-    name: "Grim Rabbit",
-    description: "Don’t let the twitch fool you—this one has seen what lies beneath the meadow. Darkness clings gently to their fur. Their laughter hides in graveyards and grows from it."
+    name: "Shy Ferret",
+    description: "Lurks near the edge of the group chat. Observant, funny, and kind—but only if they trust you. Keeps secrets like treasures."
   },
   {
-    name: "Gentle Moth",
-    description: "Drawn to soft glows and softer souls. Fragile yet determined, they dance with uncertainty. Their touch leaves light behind in every place they land."
+    name: "Forgetful Lark",
+    description: "Forgets where they put things, but never forgets how you made them feel. Hums while thinking. Brings lightness to heavy days, often without realizing."
   }
 ];
+
 
   useEffect(() => {
     const usernameIdx = Math.floor(Math.random() * usernames.length);

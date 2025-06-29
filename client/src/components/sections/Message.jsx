@@ -4,7 +4,7 @@ import { Flower } from "lucide-react";
 import { marked } from "marked";
 import ReactHtmlParser from "html-react-parser";
 
-export default function Message({ message, speed = 25, delay = 0, className = "" }) {
+export default function Message({ message, speed = 25, delay = 0, className = "", isSummary = false }) {
   const isUser = message.sender === "user";
   const rawText = message.content || "";
 
@@ -52,6 +52,13 @@ export default function Message({ message, speed = 25, delay = 0, className = ""
           isUser ? { backgroundColor: "#8E80FC", minWidth: "300px" } : undefined
         }
       >
+      {isSummary && message?.thumbnail && (
+        <img
+          src={message.thumbnail}
+          alt="Summary thumbnail"
+          className="mb-3 rounded-lg max-w-full h-auto"
+        />
+      )}
         {ReactHtmlParser(marked.parse(displayedText))}
         <p className="text-xs mt-2" style={{ color: isUser ? "rgba(255,255,255,0.7)" : "#64748b" }}>
           {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
