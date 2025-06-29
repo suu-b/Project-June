@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getStoredUsername } from "../lib/client.util"
 import logo from "@/assets/logo.png";
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 
 export default function LandingPage() {
@@ -18,10 +18,10 @@ export default function LandingPage() {
 
   const features = [
     {
-      title: "Brainstorm Document",
+      title: "Explore Document",
       icon: <Brain className="w-6 h-6 text-[#8E80FC]" />,
-      description: "Generate research ideas and explore academic topics with AI guidance",
-      action: "Start Brainstorming",
+      description: "Generate ideas and explore difficult topics with AI guidance",
+      action: "Let's think through",
       featureKey: "brainstorm",
       link: "/brainstorm-document"
     },

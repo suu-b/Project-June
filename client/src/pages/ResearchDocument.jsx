@@ -31,7 +31,7 @@ export default function ResearchDocument() {
     },
     {
       id: 3,
-      title: "Brainstorming!",
+      title: "Explore!",
       description: "You can chat with June to get your queries answered!",
     },
   ];
@@ -74,7 +74,7 @@ export default function ResearchDocument() {
           <h1 className="text-5xl text-slate-800 mb-2">
             Upload a{" "}
             <span className="text-5xl font-bold text-[#8E80FC]">document</span>{" "}
-            and let's brainstorm!
+            and let's think through it!
           </h1>
         </motion.div>
 
