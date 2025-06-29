@@ -114,8 +114,6 @@ export default function Chat() {
   const returnSummary = async () => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/query/summarize`)
-      console.log(response);
-
       const summary = response.data?.summary;
       const thumbnail = response.data?.thumbnail;
       const result = summary;

@@ -26,7 +26,6 @@ const handleFileUpload = async(req, res) => {
             textToChunk = $('body').text();
         } else textToChunk = extractedText
 
-        console.log(textToChunk);
         const chunks = await chunkText(textToChunk);
         const metadata = chunks.map((_, index) => ({
             index, 

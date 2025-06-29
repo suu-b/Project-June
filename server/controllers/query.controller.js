@@ -72,15 +72,11 @@ const handleSummarize = async (req, res) => {
 
       const summaryQuery = "Summarize the document...";
 
-      const nearestVectors = await vectorStore.similaritySearch(summaryQuery, 4); 
+      const nearestVectors = await vectorStore.similaritySearch(summaryQuery, 4) || [];
 
       const context = [`DOCUMENT CONTEXT:\n${nearestVectors.map((v, i) => `[D${i + 1}] ${v.pageContent}`).join("\n")}`];
       const summaryResponse = await runLLMToSummarize(summaryQuery, context);
-      console.log(summaryResponse);
       const summary = summaryResponse.content;
-
-      console.log(thumbnail)
-
       return res.status(200).json({summary, thumbnail});
     } catch (e) {
     console.error("Failed to format the name:", e);

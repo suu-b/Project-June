@@ -29,7 +29,7 @@ export default function Transition() {
         toast.success("File processed successfully!");
         navigate("/chat", {state: {formattedTitle: formattedTitle, from: "transition"}});
       } catch (error) {
-        console.log(error)
+        console.error("Error processing file:", error)
         toast.error("Error processing the file. Please try refreshing the window.");
         navigate("/home");
       }

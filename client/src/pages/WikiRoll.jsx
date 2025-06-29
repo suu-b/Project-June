@@ -42,7 +42,6 @@ export default function WikiRoll() {
   const onMovingForthWithTheArticle = async () => {
     const file = new File ([fetchedArticleContent], `${fetchedArticle}.html`, {type: "text/plain"});
     const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload/thumbnail`, {thumbnailSrc: fetchedArticleThumbnail});
-    console.log("Response from setting up the thumbnail:", response.data);
     setLoading(true);
     navigate("/processing", { state: { file: file, from: "wiki-roll" } });
     setLoading(false);
