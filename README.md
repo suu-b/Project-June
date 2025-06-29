@@ -1,10 +1,10 @@
-![Logo](./client/src/assets/logo.png)
+<img src="./assets/your-image-file.png" alt="Alt text" width="200" height="200">
 
 # Project June
 
 ## What is Project June?
 
-![Home](./assets/home.png)
+![home-banner](./assets/home-banner.png)
 
 Project June is actually an exploratory project aimed at understanding AI-integrated web development, and for a more focused view: how LLM wrappers are constructed. From a user's POV, the project is just an agent that can help one brainstorm a particular document. So, essentially, this is a TYPICAL project, nothing special or innovative but just a good way to get started with these uncharted concepts of the new era.
 
