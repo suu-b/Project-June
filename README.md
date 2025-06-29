@@ -1,4 +1,4 @@
-<img src="./client/src/assets/logo.png" alt="logo" width="200" height="200">
+<img src="./client/src/assets/logo.png" alt="logo" width="168" height="150">
 
 # Project June
 
