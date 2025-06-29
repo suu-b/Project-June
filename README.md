@@ -1,4 +1,4 @@
-<img src="./assets/your-image-file.png" alt="Alt text" width="200" height="200">
+<img src="./assets/logo.png" alt="Alt text" width="200" height="200">
 
 # Project June
 
