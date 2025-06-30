@@ -4,9 +4,13 @@ import { ClimbingBoxLoader, BarLoader } from 'react-spinners'
 import axios from 'axios';
 import { toast } from 'sonner';
 
+import { getUserId } from '../lib/client.util';
+
 export default function Transition() {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const userId = getUserId();
 
     const file = location?.state?.file;
     const from  = location?.state?.from;
@@ -15,19 +19,20 @@ export default function Transition() {
     const uploadFile = async () => {
       if (!file) {
         toast.error("No file found for upload.");
-        return navigate("/home");
+        if(userId){ return navigate("/home") }
+        else { return navigate('/') }
       }
 
       const formData = new FormData();
       formData.append("file", file);
 
       try {
-        await axios.post(`${import.meta.env.VITE_API_URL}/upload`, formData);
-        const formattedTitleResponse = await axios.post(`${import.meta.env.VITE_API_URL}/query/format-title`, {fileName: file.name});
+        await axios.post(`${import.meta.env.VITE_API_URL}/upload`, formData, { headers: { 'user-id': userId }});
+        const formattedTitleResponse = await axios.post(`${import.meta.env.VITE_API_URL}/query/format-title`, {fileName: file.name, userId: userId}, { headers: { 'user-id': userId }});
         const formattedTitle = formattedTitleResponse.data.result;
 
         toast.success("File processed successfully!");
-        navigate("/chat", {state: {formattedTitle: formattedTitle, from: "transition"}});
+        navigate("/chat", {state: {formattedTitle: formattedTitle, from: "transition", source: location.state?.source}});
       } catch (error) {
         console.error("Error processing file:", error)
         toast.error("Error processing the file. Please try refreshing the window.");
@@ -36,7 +41,8 @@ export default function Transition() {
     };
     
     if((!from || !file) || (from != "research-document" && from != "wiki-roll")){
-        return navigate("/home")
+        if(userId){ return navigate("/home") }
+        else { return navigate('/') }
       }
 
     uploadFile();

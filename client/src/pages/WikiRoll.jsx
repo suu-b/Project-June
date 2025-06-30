@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Upload, ArrowRight, RotateCcw, FileType } from "lucide-react";
+import { ArrowRight, RotateCcw, FileType } from "lucide-react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import heroGlobe from "@/assets/hero-globe.png";
-import axios from "axios";
-import { toast } from "sonner";
+
+import { getUserId } from "../lib/client.util";
 
 export default function WikiRoll() {
   const [fetchedArticle, setFetchedArticle] = useState(null);
@@ -18,6 +20,7 @@ export default function WikiRoll() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const userId = getUserId();
 
  const steps = [
   {
@@ -41,16 +44,16 @@ export default function WikiRoll() {
 
   const onMovingForthWithTheArticle = async () => {
     const file = new File ([fetchedArticleContent], `${fetchedArticle}.html`, {type: "text/plain"});
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload/thumbnail`, {thumbnailSrc: fetchedArticleThumbnail});
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload/thumbnail`, { thumbnailSrc: fetchedArticleThumbnail }, { headers: { 'user-id': userId }});
     setLoading(true);
-    navigate("/processing", { state: { file: file, from: "wiki-roll" } });
+    navigate("/processing", { state: { file: file, from: "wiki-roll", source: "wiki-roll" } });
     setLoading(false);
   };
 
   const onClickForWikiRoll = async () => {
     setLoading(true);
     try{
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/wiki/roll`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/wiki/roll`, { headers: { 'user-id': userId }});
       setFetchedArticle(data.title);
       setFetchedArticleContent(data.content);
       setFetchedArticleThumbnail(data.thumbnailSrc)
@@ -144,7 +147,7 @@ export default function WikiRoll() {
                               initial={{ opacity: 0, scale: 0.95 }}
                               animate={{ opacity: 1, scale: 1 }}
                             > <span className="font-extrabold">On</span>&nbsp;
-                              {fetchedArticle}
+                              { fetchedArticle.length < 15 ? fetchedArticle : fetchedArticle.substring(0,15) + "..." }
                             </motion.p>
                           )
                           )}

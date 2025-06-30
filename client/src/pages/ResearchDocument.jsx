@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import heroMicroscope from "@/assets/hero-microscope.png";
+
 import { getStoredUsername } from "../lib/client.util";
 
 export default function ResearchDocument() {
@@ -44,7 +45,7 @@ export default function ResearchDocument() {
 
   const onFileUpload = () => {
     setLoading(true);
-    navigate("/processing", { state: { file: selectedFile, from: "research-document" } });
+    navigate("/processing", { state: { file: selectedFile, from: "research-document", source: "research-document" } });
     setLoading(false);
   };
 

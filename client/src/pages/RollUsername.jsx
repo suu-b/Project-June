@@ -3,7 +3,9 @@ import { Dice5 } from "lucide-react";
 import { BarLoader } from "react-spinners";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { storeUsername } from "../lib/client.util"
+import { v4 as uuid } from 'uuid'
+
+import { storeUserId, storeUsername } from "../lib/client.util"
 
 export default function RollUsername() {
   const [showUsername, setShowUsername] = useState(false);
@@ -58,6 +60,8 @@ export default function RollUsername() {
   useEffect(() => {
     const usernameIdx = Math.floor(Math.random() * usernames.length);
     storeUsername(usernames[usernameIdx].name)
+    storeUserId(uuid())
+    
     setUsernameIdx(usernameIdx)
     const timer = setTimeout(() => setShowUsername(true), 2000);
     

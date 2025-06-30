@@ -1,11 +1,17 @@
-let thumbnailStore = null;
+const TTLMap = require("../utils/ttlMap.util")
 
-const getThumbnailStore = () => { return thumbnailStore; }
-const setThumbnailStore = (store) => { thumbnailStore = store; }
-const isThumbnailStoreInitialized = () => { return thumbnailStore != null; }
+let thumbnailStore = new TTLMap();
+
+const oneDay = 24 * 60 * 60 * 1000;
+
+const getThumbnailByUserId = (userId) => { return thumbnailStore.get(userId); }
+const setThumbnailStore = (userId, thumbnail) => {thumbnailStore.set(userId, thumbnail, oneDay) }
+const deleteEntryInThumbnailStore = (userId) => {thumbnailStore.delete(userId); }
+const isThumbnailStoreInitialized = () => { return thumbnailStore.size() > 0; }
 
 module.exports = {
-    getThumbnailStore,
     setThumbnailStore,
+    getThumbnailByUserId,
+    deleteEntryInThumbnailStore,
     isThumbnailStoreInitialized
-}
+};

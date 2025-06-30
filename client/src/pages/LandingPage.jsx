@@ -1,14 +1,24 @@
-import { Shuffle, GitCompare, Sparkles, Brain } from "lucide-react"
+import { Shuffle, GitCompare, Brain } from "lucide-react"
 import { motion } from "framer-motion"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { getStoredUsername } from "../lib/client.util"
 import logo from "@/assets/logo.png";
-import { Link } from "react-router-dom"
+
+import { getStoredUsername } from "../lib/client.util"
+import { useEffect } from "react"
 
 
 export default function LandingPage() {
   const username = getStoredUsername();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!username){
+      navigate('/');
+    }
+  }, [])
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.8 },
