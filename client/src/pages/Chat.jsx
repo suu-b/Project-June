@@ -4,13 +4,15 @@ import { Send, Flower, Search } from "lucide-react"
 import axios from "axios"
 import { toast } from "sonner"
 import { useLocation, useNavigate } from "react-router-dom"
-import Message from "../components/sections/Message"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
+import Message from "@/components/sections/Message"
+
+import { getUserId } from "../lib/client.util"
 
 export default function Chat() {
   const [messages, setMessages] = useState([])
@@ -25,10 +27,13 @@ export default function Chat() {
   const location = useLocation()
   const formattedTitle = location?.state?.formattedTitle
   const from = location?.state?.from
+  const source = location?.state?.source
+  const userId = getUserId();
 
   useEffect(() => {
     if (!formattedTitle || !from || from != "transition") {
-      navigate("/home")
+      if(userId){ return navigate("/home") }
+      else { return navigate('/') }
     }
     returnSummary();
   }, [])
@@ -113,7 +118,9 @@ export default function Chat() {
 
   const returnSummary = async () => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query/summarize`)
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query/summarize`, {isThumbnailRequired: source == "wiki-roll" ? true : false }, { headers: {
+        'user-id': userId
+      } });
       const summary = response.data?.summary;
       const thumbnail = response.data?.thumbnail;
       const result = summary;
@@ -145,7 +152,9 @@ export default function Chat() {
     try {
       setLoading(true)
       const messagesToSend = messages.slice(-5);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { query, isWebSearchAllowed, messages : messagesToSend })
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { query, isWebSearchAllowed, messages : messagesToSend }, { headers: {
+        'user-id': userId
+      }})
       const result = response.data.result
       if (result) {
         setMessages((prev) => [

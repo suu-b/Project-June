@@ -12,6 +12,7 @@ const { setThumbnailStore } = require('../store/thumbnail.store');
 
 const handleFileUpload = async(req, res) => {
     const filePath = req?.file.path;
+    const userId = req.headers['user-id'];
 
     try{
         if(!req.file) return res.status(400).json({error: "No file uploaded"});
@@ -34,7 +35,7 @@ const handleFileUpload = async(req, res) => {
         }))
 
         const vectorStore = await MemoryVectorStore.fromTexts(chunks, metadata, embeddings);
-        store.setVectorStore(vectorStore);
+        store.setVectorStore(userId, vectorStore);
 
         return res.status(200).json({ message: "File processed successfully" });
     }
@@ -50,8 +51,9 @@ const handleFileUpload = async(req, res) => {
 
 const handleThumbnailUpload = async(req, res) => {
     try{
-        const thumbnailSrc = await req.body?.thumbnailSrc;
-        setThumbnailStore(thumbnailSrc);
+        const thumbnailSrc = req.body?.thumbnailSrc;
+        const userId = req.headers['user-id'];
+        setThumbnailStore(userId, thumbnailSrc);
         return res.status(200).json({message: "Thumbnail uploaded successfully!"});        
     }
     catch(error){

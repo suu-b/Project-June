@@ -5,6 +5,8 @@ const  searchWeb  = require("../utils/searchWeb.util");
 
 
 const handleQuery = async (req, res) => {
+  const userId = req.headers['user-id'];
+
   const keywordsRequireForRealTimeSearch = [
          "latest", "today", "now", "current", "trending",
          "breaking", "updated", "2025", "2024", "news",
@@ -17,7 +19,7 @@ const handleQuery = async (req, res) => {
       return res.status(404).json({ error: "Vector store is not yet initialized" });
     }
 
-    const vectorStore = store.getVectorStore();
+    const vectorStore = store.getVectorStoreByUserId(userId);
     const query = req.body.query;
     const isWebSearchAllowed = req.body.isWebSearchAllowed
     const messageHistory = req.body.messages;
@@ -65,10 +67,12 @@ const handleTitleFormat = async (req, res) => {
 };
 
 const handleSummarize = async (req, res) => {
-    try{
-      const vectorStore = store.getVectorStore();
-      const thumbnail = thumbnailStore.getThumbnailStore();
-      thumbnailStore.setThumbnailStore(null);
+    try {
+      const userId = req.headers['user-id'];
+      const isThumbnailRequired = req.body.isThumbnailRequired;
+
+      const vectorStore = store.getVectorStoreByUserId(userId);
+      const thumbnail = isThumbnailRequired ? thumbnailStore.getThumbnailByUserId(userId) : undefined;
 
       const summaryQuery = "Summarize the document...";
 
